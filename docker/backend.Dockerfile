@@ -36,14 +36,7 @@ RUN pnpm --filter @lynkify/backend db:generate
 RUN pnpm --filter @lynkify/backend build
 
 # ============================================
-# Stage 3: Production dependencies only
-# ============================================
-FROM deps AS prod-deps
-
-RUN pnpm install --frozen-lockfile --prod
-
-# ============================================
-# Stage 4: Production runtime
+# Stage 3: Production runtime
 # ============================================
 FROM node:20-alpine AS runner
 
@@ -56,25 +49,28 @@ RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 backend
 
 # Copy workspace config
-COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
+COPY --from=builder /app/package.json /app/pnpm-workspace.yaml /app/pnpm-lock.yaml ./
+COPY --from=builder /app/tsconfig.base.json ./
 
-# Copy production node_modules
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=prod-deps /app/packages/shared/node_modules ./packages/shared/node_modules
-COPY --from=prod-deps /app/packages/backend/node_modules ./packages/backend/node_modules
+# Copy entire node_modules structure (pnpm requires this for symlinks)
+COPY --from=builder /app/node_modules ./node_modules
+
+# Copy package manifests
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+COPY --from=builder /app/packages/backend/package.json ./packages/backend/
+
+# Copy package node_modules (symlinks to root)
+COPY --from=builder /app/packages/shared/node_modules ./packages/shared/node_modules
+COPY --from=builder /app/packages/backend/node_modules ./packages/backend/node_modules
 
 # Copy built shared package
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 
 # Copy built backend
-COPY --from=builder /app/packages/backend/package.json ./packages/backend/
 COPY --from=builder /app/packages/backend/dist ./packages/backend/dist
 
-# Copy Prisma schema + generated client
+# Copy Prisma schema
 COPY --from=builder /app/packages/backend/prisma ./packages/backend/prisma
-COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/@prisma/client ./node_modules/@prisma/client
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 USER backend
 
