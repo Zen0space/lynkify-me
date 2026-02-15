@@ -24,6 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 }
 
+type LinkData = { id: string; url: string; title: string; icon: string | null; archived: boolean };
+
 export default async function UserProfilePage({ params }: Props) {
     const { slug } = await params;
 
@@ -33,14 +35,14 @@ export default async function UserProfilePage({ params }: Props) {
         logtoId: string;
         avatarConfig: unknown;
     } | null = null;
-    let links: { id: string; url: string; title: string; icon: string | null; archived: boolean }[] = [];
+    let links: LinkData[] = [];
 
     try {
         const userData = await trpcServer.users.bySlug.query({ slug });
         user = userData;
         if (!user) notFound();
         const allLinks = await trpcServer.links.list.query({ logtoId: user.logtoId });
-        links = allLinks.filter((l) => !l.archived);
+        links = (allLinks as LinkData[]).filter((l) => !l.archived);
     } catch {
         notFound();
     }

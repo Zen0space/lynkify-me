@@ -58,6 +58,9 @@ jobs:
       - name: Build Shared Package
         run: pnpm --filter @lynkify/shared build
 
+      - name: Build Backend Package
+        run: pnpm --filter @lynkify/backend build
+
       - name: Type Check Frontend
         run: pnpm --filter @lynkify/frontend typecheck
 

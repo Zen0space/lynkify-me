@@ -3,6 +3,14 @@
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
 
+type LinkItem = {
+    id: string;
+    title: string;
+    url: string;
+    icon: string | null;
+    archived: boolean;
+};
+
 export default function LinkManager({ logtoId }: { logtoId: string }) {
     const utils = trpc.useUtils();
     const { data: links, isLoading } = trpc.links.list.useQuery({ logtoId });
@@ -113,7 +121,7 @@ export default function LinkManager({ logtoId }: { logtoId: string }) {
                     </div>
                 ) : (
                     <div className="grid gap-3">
-                        {links?.map((link) => (
+                        {(links as LinkItem[] | undefined)?.map((link) => (
                             <div key={link.id} className={`glass p-4 rounded-xl border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between group transition-all hover:border-surface-600 hover:bg-surface-800/40 gap-4 ${link.archived ? 'opacity-60 grayscale-[0.5]' : ''}`}>
                                 <div className="flex items-center gap-4 overflow-hidden">
                                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0 ${link.archived ? 'bg-surface-800 text-surface-400' : 'bg-gradient-to-br from-primary-600/20 to-primary-600/5 text-primary-300'}`}>
