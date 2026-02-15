@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  logtoId            String   @unique @map("logto_id")
+  username           String?  @unique
+  email              String?  @unique
+  displayName        String?  @map("display_name")
+  slug               String?  @unique
+  avatarConfig       Json?    @map("avatar_config")
+  onboardingComplete Boolean  @default(false) @map("onboarding_complete")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  links              Link[]
+
+  @@map("users")
+}
+
+model Link {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title       String
+  url         String
+  icon        String?
+  archived    Boolean  @default(false)
+  clicks      Int      @default(0)
+  order       Int      @default(0)
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("links")
+}

@@ -1,0 +1,91 @@
+# Local development — PostgreSQL, Logto, and Redis
+# Usage: docker compose up -d
+
+services:
+  # PostgreSQL for backend (Prisma)
+  postgres:
+    image: postgres:17-alpine
+    container_name: lynkify-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: lynkify
+      POSTGRES_PASSWORD: lynkify_secret
+      POSTGRES_DB: lynkify_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U lynkify -d lynkify_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lynkify
+
+  # PostgreSQL for Logto (separate database)
+  logto-db:
+    image: postgres:17-alpine
+    container_name: lynkify-logto-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: logto
+      POSTGRES_PASSWORD: logto_secret
+      POSTGRES_DB: logto
+    volumes:
+      - logto_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U logto -d logto" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lynkify
+
+  # Logto — Authentication service
+  logto:
+    image: svhd/logto:latest
+    container_name: lynkify-logto
+    restart: unless-stopped
+    entrypoint: [ "sh", "-c", "npm run cli db seed -- --swe && npm start" ]
+    ports:
+      - "3001:3001" # Core / API (public endpoint)
+      - "3002:3002" # Admin console
+    environment:
+      TRUST_PROXY_HEADER: "1"
+      DB_URL: postgresql://logto:logto_secret@logto-db:5432/logto
+      ENDPOINT: http://localhost:3001
+      ADMIN_ENDPOINT: http://localhost:3002
+    depends_on:
+      logto-db:
+        condition: service_healthy
+    networks:
+      - lynkify
+
+  # Redis — Session store / caching for backend
+  redis:
+    image: redis:7-alpine
+    container_name: lynkify-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lynkify
+
+volumes:
+  postgres_data:
+  logto_db_data:
+  redis_data:
+
+
+networks:
+  lynkify:
+    driver: bridge

@@ -1,0 +1,32 @@
+
+> @lynkify/frontend@0.0.1 lint /Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend
+> eslint .
+
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/next-env.d.ts
+  3:1  error  Do not use a triple slash reference for ./.next/types/routes.d.ts, use `import` style instead  @typescript-eslint/triple-slash-reference
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/src/app/[slug]/page.tsx
+  30:14  error  'error' is defined but never used                                                                                                                      @typescript-eslint/no-unused-vars
+  35:11  error  'avatarConfig' is assigned a value but never used                                                                                                      @typescript-eslint/no-unused-vars
+  75:25  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  75:25  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/src/app/onboarding/flow.tsx
+  38:51  error  'email' is defined but never used            @typescript-eslint/no-unused-vars
+  39:11  error  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/src/app/page.tsx
+  66:33  error  Do not use an `<a>` element to navigate to `/dashboard/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/src/components/landing/cta-section.tsx
+  29:25  error  Do not use an `<a>` element to navigate to `/dashboard/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/Volumes/Dev/users/Dev/Desktop/Github/lynkify-me/packages/frontend/src/components/landing/navbar.tsx
+  32:17  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages            @next/next/no-html-link-for-pages
+  32:17  error  Do not use an `<a>` element to navigate to `/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages            @next/next/no-html-link-for-pages
+  54:25  error  Do not use an `<a>` element to navigate to `/dashboard/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+✖ 12 problems (12 errors, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

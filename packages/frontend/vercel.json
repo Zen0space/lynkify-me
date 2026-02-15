@@ -1,0 +1,5 @@
+{
+    "framework": "nextjs",
+    "buildCommand": "cd ../.. && pnpm --filter @lynkify/shared build && pnpm --filter @lynkify/frontend build",
+    "outputDirectory": ".next"
+}

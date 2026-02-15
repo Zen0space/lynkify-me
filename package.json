@@ -1,0 +1,23 @@
+{
+  "name": "lynkify-me",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:backend": "pnpm --filter @lynkify/backend dev",
+    "dev:frontend": "pnpm --filter @lynkify/frontend dev",
+    "build": "pnpm -r build",
+    "build:backend": "pnpm --filter @lynkify/backend build",
+    "build:frontend": "pnpm --filter @lynkify/frontend build",
+    "lint": "pnpm -r lint",
+    "db:generate": "pnpm --filter @lynkify/backend db:generate",
+    "db:push": "pnpm --filter @lynkify/backend db:push",
+    "db:migrate": "pnpm --filter @lynkify/backend db:migrate",
+    "db:studio": "pnpm --filter @lynkify/backend db:studio",
+    "clean": "pnpm -r clean && rm -rf node_modules"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.4"
+}
