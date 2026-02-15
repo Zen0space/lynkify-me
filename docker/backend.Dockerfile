@@ -74,7 +74,7 @@ COPY --from=builder /app/packages/backend/prisma ./packages/backend/prisma
 
 USER backend
 
-EXPOSE 7000
+EXPOSE 4000
 
 ENV NODE_ENV=production
 
