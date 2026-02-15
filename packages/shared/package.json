@@ -14,12 +14,18 @@
     "scripts": {
         "build": "tsc --build",
         "dev": "tsc --build --watch",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "typecheck": "tsc --noEmit",
         "clean": "rm -rf dist tsconfig.tsbuildinfo"
     },
     "dependencies": {
         "zod": "^3.23.8"
     },
     "devDependencies": {
-        "typescript": "^5.7.3"
+        "@eslint/js": "^9.14.0",
+        "eslint": "^9.14.0",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.24.1"
     }
 }

@@ -6,6 +6,7 @@ node_modules/
 dist/
 .next/
 out/
+*.tsbuildinfo
 
 # Environment (ignore at any depth, but keep .example templates)
 **/.env

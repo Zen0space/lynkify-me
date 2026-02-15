@@ -56,8 +56,9 @@ export default function LinkManager({ logtoId }: { logtoId: string }) {
                 </h2>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 md:flex-row md:items-end">
                     <div className="flex-1 space-y-2">
-                        <label className="text-xs font-medium text-surface-200/60 uppercase tracking-wider">Title</label>
+                        <label htmlFor="link-title" className="text-xs font-medium text-surface-200/60 uppercase tracking-wider">Title</label>
                         <input
+                            id="link-title"
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
@@ -67,8 +68,9 @@ export default function LinkManager({ logtoId }: { logtoId: string }) {
                         />
                     </div>
                     <div className="flex-1 space-y-2">
-                        <label className="text-xs font-medium text-surface-200/60 uppercase tracking-wider">URL</label>
+                        <label htmlFor="link-url" className="text-xs font-medium text-surface-200/60 uppercase tracking-wider">URL</label>
                         <input
+                            id="link-url"
                             type="url"
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}

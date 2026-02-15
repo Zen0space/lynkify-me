@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { trpcServer } from "@/lib/trpc-server";
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import type { AvatarConfig } from "@lynkify/shared";
@@ -27,19 +27,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function UserProfilePage({ params }: Props) {
     const { slug } = await params;
 
-    let user;
-    let links: any[] = [];
+    let user: {
+        displayName: string | null;
+        slug: string | null;
+        logtoId: string;
+        avatarConfig: unknown;
+    } | null = null;
+    let links: { id: string; url: string; title: string; icon: string | null; archived: boolean }[] = [];
 
     try {
-        user = await trpcServer.users.bySlug.query({ slug });
-        // Fetch links for this user
+        const userData = await trpcServer.users.bySlug.query({ slug });
+        user = userData;
+        if (!user) notFound();
         const allLinks = await trpcServer.links.list.query({ logtoId: user.logtoId });
-        links = allLinks.filter((l: any) => !l.archived);
+        links = allLinks.filter((l) => !l.archived);
     } catch {
         notFound();
     }
 
-    const avatarConfig = ((user as any)?.avatarConfig as unknown as AvatarConfig) || null;
+    const avatarConfig = (user?.avatarConfig as AvatarConfig | null) ?? null;
 
     return (
         <div className="min-h-screen bg-surface-950 text-white overflow-x-hidden">

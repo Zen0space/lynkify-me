@@ -15,9 +15,9 @@ export default function Footer() {
 
                     {/* Links */}
                     <div className="flex items-center gap-6 text-xs text-surface-200/40">
-                        <a href="#" className="hover:text-surface-200 transition-colors">Privacy</a>
-                        <a href="#" className="hover:text-surface-200 transition-colors">Terms</a>
-                        <a href="#" className="hover:text-surface-200 transition-colors">Contact</a>
+                        <a href="#privacy" className="hover:text-surface-200 transition-colors">Privacy</a>
+                        <a href="#terms" className="hover:text-surface-200 transition-colors">Terms</a>
+                        <a href="#contact" className="hover:text-surface-200 transition-colors">Contact</a>
                     </div>
 
                     {/* Copyright */}

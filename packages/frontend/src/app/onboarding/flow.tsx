@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { genConfig } from "react-nice-avatar";
 import { trpc } from "@/lib/trpc";
 import { UserAvatar } from "@/components/avatar/user-avatar";
@@ -42,6 +42,18 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
     const [avatarConfig, setAvatarConfig] = useState<AvatarConfig>(getRandomConfig());
     const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
 
+    const displayNameInputRef = useRef<HTMLInputElement>(null);
+    const slugInputRef = useRef<HTMLInputElement>(null);
+
+    // Auto-focus inputs when steps change
+    useEffect(() => {
+        if (step === 1) {
+            displayNameInputRef.current?.focus();
+        } else if (step === 2) {
+            slugInputRef.current?.focus();
+        }
+    }, [step]);
+
     // Queries & Mutations
     const checkSlug = trpc.users.checkSlug.useQuery(
         { slug },
@@ -50,11 +62,9 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
 
     const completeOnboarding = trpc.users.completeOnboarding.useMutation({
         onSuccess: () => {
-            // Force refresh to update any server-side validation/redirection logic
-            // and go to dashboard
             window.location.href = "/dashboard";
         },
-        onError: (err: any) => {
+        onError: (err: { message: string }) => {
             alert("Failed to create profile: " + err.message);
         }
     });
@@ -118,16 +128,17 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
 
                             {/* Name Input */}
                             <div className="mb-6 text-left">
-                                <label className="block text-xs font-bold text-surface-200/80 mb-2 ml-1 tracking-wide">
+                                <label htmlFor="display-name" className="block text-xs font-bold text-surface-200/80 mb-2 ml-1 tracking-wide">
                                     DISPLAY NAME
                                 </label>
                                 <input
+                                    ref={displayNameInputRef}
+                                    id="display-name"
                                     type="text"
                                     value={displayName}
                                     onChange={(e) => setDisplayName(e.target.value)}
                                     placeholder="e.g. Jane Doe"
                                     className="w-full rounded-xl bg-surface-900/50 border border-surface-700/50 px-4 py-3.5 text-white placeholder-surface-200/20 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500/50 transition-all"
-                                    autoFocus
                                 />
                             </div>
 
@@ -157,7 +168,7 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
                             </p>
 
                             <div className="mb-8 text-left">
-                                <label className="block text-xs font-bold text-surface-200/80 mb-2 ml-1 tracking-wide">
+                                <label htmlFor="username-slug" className="block text-xs font-bold text-surface-200/80 mb-2 ml-1 tracking-wide">
                                     USERNAME
                                 </label>
                                 <div className="relative group">
@@ -165,6 +176,8 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
                                         lynkify.me/
                                     </span>
                                     <input
+                                        ref={slugInputRef}
+                                        id="username-slug"
                                         type="text"
                                         value={slug}
                                         onChange={(e) => {
@@ -180,7 +193,6 @@ export default function OnboardingFlow({ logtoId, username }: Props) {
                                                     ? "border-emerald-500/50 focus:ring-emerald-500/50 ring-1 ring-emerald-500/30"
                                                     : "border-surface-700/50 focus:ring-primary-500/50"
                                             }`}
-                                        autoFocus
                                     />
 
                                     {/* Status Indicator */}

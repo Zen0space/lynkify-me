@@ -1,9 +1,7 @@
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import path from "path";
-import { createReadStream } from "fs";
 
-// Load .env from the backend package root
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
@@ -13,22 +11,6 @@ import { appRouter } from "./trpc/router.js";
 import { createContext } from "./trpc/context.js";
 
 const port = Number(process.env.BACKEND_PORT) || 4000;
-
-async function getRequestBody(req: any): Promise<any> {
-    return new Promise((resolve) => {
-        let body = "";
-        req.on("data", (chunk: Buffer) => {
-            body += chunk.toString();
-        });
-        req.on("end", () => {
-            try {
-                resolve(JSON.parse(body));
-            } catch {
-                resolve(body);
-            }
-        });
-    });
-}
 
 function getProcedurePath(url: string): string | null {
     if (!url) return null;

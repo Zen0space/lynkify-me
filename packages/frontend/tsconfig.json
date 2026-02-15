@@ -23,6 +23,9 @@
       ],
       "@lynkify/backend/src/trpc/router": [
         "../backend/src/trpc/router"
+      ],
+      "@lynkify/shared": [
+        "../shared/src"
       ]
     },
     "composite": false,

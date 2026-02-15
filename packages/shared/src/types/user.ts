@@ -3,13 +3,14 @@ import type { AvatarConfig } from "./avatar.js";
 export interface User {
     id: string;
     logtoId: string;
-    email: string;
+    username: string | null;
+    email: string | null;
     displayName: string | null;
     slug: string | null;
     avatarConfig: AvatarConfig | null;
     onboardingComplete: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface CreateUserInput {

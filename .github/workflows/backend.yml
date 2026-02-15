@@ -4,11 +4,34 @@ on:
   push:
     paths:
       - 'packages/backend/**'
+      - 'packages/shared/**'
   pull_request:
     paths:
       - 'packages/backend/**'
+      - 'packages/shared/**'
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm --filter @lynkify/backend db:generate
+
+      - name: Lint Backend
+        run: pnpm --filter @lynkify/backend lint
+
   type-check:
     runs-on: ubuntu-latest
     steps:
@@ -28,4 +51,4 @@ jobs:
         run: pnpm --filter @lynkify/backend db:generate
 
       - name: Type Check Backend
-        run: pnpm --filter @lynkify/backend build
+        run: pnpm --filter @lynkify/backend typecheck

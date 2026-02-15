@@ -1,4 +1,4 @@
-import { router, publicProcedure } from "./trpc.js";
+import { router } from "./trpc.js";
 import { userRouter } from "./routers/user.js";
 import { linksRouter } from "./routers/link.js";
 

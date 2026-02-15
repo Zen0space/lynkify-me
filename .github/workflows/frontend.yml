@@ -4,9 +4,13 @@ on:
   push:
     paths:
       - 'packages/frontend/**'
+      - 'packages/backend/**'
+      - 'packages/shared/**'
   pull_request:
     paths:
       - 'packages/frontend/**'
+      - 'packages/backend/**'
+      - 'packages/shared/**'
 
 jobs:
   lint:
@@ -23,6 +27,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm db:generate
+
+      - name: Build Shared Package
+        run: pnpm --filter @lynkify/shared build
 
       - name: Lint Frontend
         run: pnpm --filter @lynkify/frontend lint
@@ -42,5 +52,35 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Generate Prisma Client
+        run: pnpm db:generate
+
+      - name: Build Shared Package
+        run: pnpm --filter @lynkify/shared build
+
       - name: Type Check Frontend
+        run: pnpm --filter @lynkify/frontend typecheck
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        run: pnpm db:generate
+
+      - name: Build Shared Package
+        run: pnpm --filter @lynkify/shared build
+
+      - name: Build Frontend
         run: pnpm --filter @lynkify/frontend build

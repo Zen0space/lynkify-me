@@ -1,6 +1,6 @@
 import { handleSignIn, getLogtoContext } from "@logto/next/server-actions";
 import { redirect } from "next/navigation";
-import { type NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { logtoConfig } from "@/lib/logto";
 import { trpcServer } from "@/lib/trpc-server";
 

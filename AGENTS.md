@@ -25,10 +25,18 @@ pnpm db:studio      # Open Prisma Studio (port 5555)
 pnpm db:generate    # Generate Prisma Client
 ```
 
-### Kill Processes
+### Linting and Type Checking
 ```bash
-lsof -ti:4000 | xargs kill -9  # Kill backend
-lsof -ti:3000 | xargs kill -9  # Kill frontend
+pnpm lint           # Lint all packages
+pnpm lint:fix       # Lint and auto-fix all packages
+pnpm typecheck      # Type check all packages
+```
+
+### Build Commands
+```bash
+pnpm build          # Build all packages (includes db:generate)
+pnpm build:backend  # Build backend only
+pnpm build:frontend # Build frontend only
 ```
 
 ## Important Rules

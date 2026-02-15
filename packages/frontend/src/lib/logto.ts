@@ -1,4 +1,4 @@
-import { type LogtoNextConfig } from "@logto/next";
+import type { LogtoNextConfig } from "@logto/next";
 
 export const logtoConfig: LogtoNextConfig = {
     endpoint: process.env.LOGTO_ENDPOINT!,

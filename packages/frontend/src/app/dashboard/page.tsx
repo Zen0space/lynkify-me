@@ -5,7 +5,7 @@ import LinkManager from "@/components/dashboard/link-manager";
 import MobilePreview from "@/components/dashboard/mobile-preview";
 import { trpcServer } from "@/lib/trpc-server";
 import { UserAvatar } from "@/components/avatar/user-avatar";
-import { AvatarConfig } from "@lynkify/shared";
+import type { AvatarConfig } from "@lynkify/shared";
 
 export default async function DashboardPage() {
     const { isAuthenticated, claims } = await getLogtoContext(logtoConfig);
@@ -14,13 +14,18 @@ export default async function DashboardPage() {
         redirect("/");
     }
 
-    // Fetch user from backend to get profile data (avatar, display name, slug)
-    const user = await trpcServer.users.byLogtoId.query({ logtoId: claims.sub });
+    const userData = await trpcServer.users.byLogtoId.query({ logtoId: claims.sub });
+    const user = userData as {
+        displayName: string | null;
+        username: string | null;
+        slug: string | null;
+        avatarConfig: unknown;
+    } | null;
 
     const displayName = user?.displayName || claims.name || "User";
     const username = user?.username || claims.username || "username";
     const slug = user?.slug || "";
-    const avatarConfig = ((user as any)?.avatarConfig as unknown as AvatarConfig) || null;
+    const avatarConfig = (user?.avatarConfig as AvatarConfig | null) ?? null;
 
     return (
         <div className="min-h-screen bg-surface-950 text-white px-6 py-10 md:p-12">

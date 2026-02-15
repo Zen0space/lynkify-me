@@ -1,5 +1,5 @@
 import { createTRPCClient, httpLink } from "@trpc/client";
-import { type AppRouter } from "@lynkify/backend/src/trpc/router";
+import type { AppRouter } from "@lynkify/backend/src/trpc/router";
 
 export const trpcServer = createTRPCClient<AppRouter>({
     links: [

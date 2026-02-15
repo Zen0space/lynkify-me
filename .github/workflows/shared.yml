@@ -9,6 +9,24 @@ on:
       - 'packages/shared/**'
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint Shared
+        run: pnpm --filter @lynkify/shared lint
+
   type-check:
     runs-on: ubuntu-latest
     steps:
@@ -25,4 +43,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type Check Shared
+        run: pnpm --filter @lynkify/shared typecheck
+
+      - name: Build Shared
         run: pnpm --filter @lynkify/shared build

@@ -8,6 +8,7 @@ import {
     completeOnboardingSchema,
 } from "@lynkify/shared";
 import { TRPCError } from "@trpc/server";
+import type { Prisma } from "@prisma/client";
 
 export const userRouter = router({
     list: publicProcedure.query(async ({ ctx }) => {
@@ -145,7 +146,7 @@ export const userRouter = router({
                 data: {
                     displayName: input.displayName,
                     slug: input.slug,
-                    avatarConfig: input.avatarConfig as any, // Json type casting
+                    avatarConfig: input.avatarConfig as Prisma.InputJsonValue,
                     onboardingComplete: true,
                 },
             });
@@ -160,7 +161,7 @@ export const userRouter = router({
                     logtoId: `test_${Date.now()}`,
                     email: input.email,
                     displayName: input.name,
-                    avatarConfig: input.avatarConfig as any,
+                    avatarConfig: input.avatarConfig as Prisma.InputJsonValue,
                 },
             });
         }),
@@ -173,9 +174,14 @@ export const userRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
+            const updateData: Prisma.UserUpdateInput = {};
+            if (input.data.name) updateData.displayName = input.data.name;
+            if (input.data.email) updateData.email = input.data.email;
+            if (input.data.avatarConfig) updateData.avatarConfig = input.data.avatarConfig as Prisma.InputJsonValue;
+            
             return ctx.prisma.user.update({
                 where: { id: input.id },
-                data: input.data as any,
+                data: updateData,
             });
         }),
 
