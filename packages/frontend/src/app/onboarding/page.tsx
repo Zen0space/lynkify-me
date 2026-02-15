@@ -3,6 +3,8 @@ import { logtoConfig } from "@/lib/logto";
 import { redirect } from "next/navigation";
 import OnboardingFlow from "./flow";
 
+export const dynamic = "force-dynamic";
+
 export default async function OnboardingPage() {
     const { isAuthenticated, claims } = await getLogtoContext(logtoConfig);
 

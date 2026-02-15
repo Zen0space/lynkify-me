@@ -8,6 +8,8 @@ import HowItWorks from "@/components/landing/how-it-works";
 import CtaSection from "@/components/landing/cta-section";
 import Footer from "@/components/landing/footer";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
     const { isAuthenticated } = await getLogtoContext(logtoConfig);
 

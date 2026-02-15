@@ -5,6 +5,8 @@ import Link from "next/link";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import type { AvatarConfig } from "@lynkify/shared";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
     params: Promise<{ slug: string }>;
 };

@@ -7,6 +7,8 @@ import { trpcServer } from "@/lib/trpc-server";
 import { UserAvatar } from "@/components/avatar/user-avatar";
 import type { AvatarConfig } from "@lynkify/shared";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
     const { isAuthenticated, claims } = await getLogtoContext(logtoConfig);
 
