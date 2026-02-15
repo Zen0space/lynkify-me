@@ -7,6 +7,8 @@ import {
 } from "@lynkify/shared";
 import { TRPCError } from "@trpc/server";
 
+type ReorderItem = { id: string; order: number };
+
 export const linksRouter = router({
     create: publicProcedure
         .input(z.object({ logtoId: z.string() }).merge(createLinkSchema))
@@ -151,7 +153,8 @@ export const linksRouter = router({
             }
 
             // Verify all links belong to user
-            const linkIds = input.items.map((i) => i.id);
+            const items = input.items as ReorderItem[];
+            const linkIds = items.map((i) => i.id);
             const links = await ctx.prisma.link.findMany({
                 where: {
                     id: { in: linkIds },
@@ -168,7 +171,7 @@ export const linksRouter = router({
 
             // Update order in transaction
             return ctx.prisma.$transaction(
-                input.items.map((item) =>
+                items.map((item) =>
                     ctx.prisma.link.update({
                         where: { id: item.id },
                         data: { order: item.order },

@@ -29,6 +29,9 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter @lynkify/backend db:generate
 
+      - name: Build Shared Package
+        run: pnpm --filter @lynkify/shared build
+
       - name: Lint Backend
         run: pnpm --filter @lynkify/backend lint
 
@@ -49,6 +52,9 @@ jobs:
 
       - name: Generate Prisma Client
         run: pnpm --filter @lynkify/backend db:generate
+
+      - name: Build Shared Package
+        run: pnpm --filter @lynkify/shared build
 
       - name: Type Check Backend
         run: pnpm --filter @lynkify/backend typecheck

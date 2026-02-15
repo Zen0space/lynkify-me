@@ -6,6 +6,7 @@ import {
     syncUserSchema,
     checkSlugSchema,
     completeOnboardingSchema,
+    type UpdateUserSchema,
 } from "@lynkify/shared";
 import { TRPCError } from "@trpc/server";
 import type { Prisma } from "@prisma/client";
@@ -174,10 +175,11 @@ export const userRouter = router({
             })
         )
         .mutation(async ({ ctx, input }) => {
+            const data = input.data as UpdateUserSchema;
             const updateData: Prisma.UserUpdateInput = {};
-            if (input.data.name) updateData.displayName = input.data.name;
-            if (input.data.email) updateData.email = input.data.email;
-            if (input.data.avatarConfig) updateData.avatarConfig = input.data.avatarConfig as Prisma.InputJsonValue;
+            if (data.name) updateData.displayName = data.name;
+            if (data.email) updateData.email = data.email;
+            if (data.avatarConfig) updateData.avatarConfig = data.avatarConfig as Prisma.InputJsonValue;
             
             return ctx.prisma.user.update({
                 where: { id: input.id },
